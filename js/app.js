@@ -48,7 +48,7 @@
 // https://www.googleapis.com/youtube/v3/search/?part=snippet&key=AIzaSyBxN1jj2vdsQILbeEYLQi6jlVHZbP6f4wY&q=dog/
 
 //nextPageToken for viewing additional results
-var state ={
+var state = {
   items : [],
   nextPage: '',
   previousPage: ''
@@ -68,18 +68,24 @@ function getDataFromApi(searchTerm, callback) {
 function addItems(data){
   var itemArr = data.items.map(function(item, index){
     var thumbnail = item.snippet.thumbnails.default.url;
+    //var description (WILL USE THIS FOR ALT IMG TEXT)
     //console.log(thumbnail);
     var vidUrl = "https://www.youtube.com.com/watch?v=" + item.id.videoId;
     //console.log(vidUrl);
     return [thumbnail, vidUrl];
   });
   state.items = itemArr;
-  console.log(itemArr);
 }
 
-function display(data){
-
+function display(state){
+  console.log(state.items);
+  state.items[0].forEach(function(item){
+    // console.log(item[0]);
+    // console.log(item[1]);
+  });
 }
 
 getDataFromApi("dog", addItems);
+
+display(state);
 //console.log(state.items)
