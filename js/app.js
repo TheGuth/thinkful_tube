@@ -61,6 +61,7 @@ function getDataFromApi(searchTerm, callback) {
     part: 'snippet',
     key: 'AIzaSyBxN1jj2vdsQILbeEYLQi6jlVHZbP6f4wY',
     q: searchTerm,
+    maxResults: 10
   }
   $.getJSON(YOUTUBE_BASE_URL, query, callback);
 }
@@ -75,17 +76,29 @@ function addItems(data){
     return [thumbnail, vidUrl];
   });
   state.items = itemArr;
+  //console.log(state.items);
 }
 
 function display(state){
-  console.log(state.items);
-  state.items[0].forEach(function(item){
-    // console.log(item[0]);
-    // console.log(item[1]);
+  //console.log(state.items);
+  //<li><a href="#"><img src="" alt=""></a></li>
+  state.items.forEach(function(item){
+    console.log(item[0]);
+    console.log(item[1]);
   });
 }
 
-getDataFromApi("dog", addItems);
+function initializeSearch(data){
+  addItems(data);
+  display(state);
+}
 
-display(state);
-//console.log(state.items)
+
+$(function (){
+  getDataFromApi("dog", initializeSearch);
+});
+//$(eventHandlers);
+//OR
+// $(function() {
+//   eventHandlers();
+// });
