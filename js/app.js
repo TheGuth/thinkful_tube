@@ -23,7 +23,7 @@
 
 // 3. Show a link for more from the channel that each video came from
 
-// 4. Sho buttons to get more results (using the previous and next page 
+// 4. Sho buttons to get more results (using the previous and next page
 //    links from the JSON)
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -47,43 +47,39 @@
 
 // https://www.googleapis.com/youtube/v3/search/?part=snippet&key=AIzaSyBxN1jj2vdsQILbeEYLQi6jlVHZbP6f4wY&q=dog/
 
-var YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/v3/search/?"
+//nextPageToken for viewing additional results
+var state ={
+  items : [],
+  nextPage: '',
+  previousPage: ''
+};
+
+var YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/v3/search/"
 
 function getDataFromApi(searchTerm, callback) {
   var query = {
     part: 'snippet',
     key: 'AIzaSyBxN1jj2vdsQILbeEYLQi6jlVHZbP6f4wY',
-    q: 'dog',
+    q: searchTerm,
   }
   $.getJSON(YOUTUBE_BASE_URL, query, callback);
 }
 
+function addItems(data){
+  var itemArr = data.items.map(function(item, index){
+    var thumbnail = item.snippet.thumbnails.default.url;
+    //console.log(thumbnail);
+    var vidUrl = "https://www.youtube.com.com/watch?v=" + item.id.videoId;
+    //console.log(vidUrl);
+    return [thumbnail, vidUrl];
+  });
+  state.items = itemArr;
+  console.log(itemArr);
+}
 
+function display(data){
 
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+getDataFromApi("dog", addItems);
+//console.log(state.items)
