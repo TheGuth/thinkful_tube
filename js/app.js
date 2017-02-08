@@ -52,24 +52,28 @@ var state = {
   items : [],
   nextPage: '',
   prevPage: '',
-  searched: false
+  searched: false,
+  query: {
+    part: 'snippet',
+    key: 'AIzaSyBxN1jj2vdsQILbeEYLQi6jlVHZbP6f4wY',
+    q: '',
+    maxResults: 10,
+    pageToken: '',
+  }
 };
 
 var YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/v3/search/"
 
 function getDataFromApi(searchTerm, callback) {
-  var query = {
-    part: 'snippet',
-    key: 'AIzaSyBxN1jj2vdsQILbeEYLQi6jlVHZbP6f4wY',
-    q: searchTerm,
-    maxResults: 10,
-  }
-  // if
-  // query.PageToken = state.nextPage
-  $.getJSON(YOUTUBE_BASE_URL, query, callback);
+  state.query.q = searchTerm;
+  
+  $.getJSON(YOUTUBE_BASE_URL, state.query, callback);
 }
 
 function addItems(data){
+  state.nextPage = data.nextPageToken;
+  state.prevPage = data.prevPageToken;
+
   var itemArr = data.items.map(function(item, index){
     var thumbnail = item.snippet.thumbnails.default.url;
     var description = item.snippet.description;
@@ -77,6 +81,7 @@ function addItems(data){
     var vidUrl = "https://www.youtube.com/watch?v=" + item.id.videoId;
     return [thumbnail, vidUrl, title, description];
   });
+
   state.items = itemArr;
   state.nextPage = data.nextPageToken;
   state.prevPage = data.prevPageToken;
@@ -99,14 +104,29 @@ function initializeSearch(data){
 }
 
 function eventListeners(){
+
   $(".js-query").submit(function(e){
     state.searched = true;
     state.items = [];
     $('#js-results-list').empty();
     e.preventDefault();
-    var userSearch = $("#js-search-text").val();
-    getDataFromApi(userSearch, initializeSearch);
-  })
+    state.query.q = $("#js-search-text").val();
+    getDataFromApi(state.query.q, initializeSearch);
+  });
+
+  $('#js-next-btn').click(function(e) {
+    state.items = [];
+    $('#js-results-list').empty();
+    state.query.pageToken = state.nextPage;
+    getDataFromApi(state.query.q, initializeSearch);
+  });
+
+  $('#js-prev-btn').click(function(e) {
+    state.items = [];
+    $('#js-results-list').empty();
+    state.query.pageToken = state.prevPage;
+    getDataFromApi(state.query.q, initializeSearch);
+  });
 }
 
 $(function (){
