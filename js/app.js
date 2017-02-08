@@ -51,7 +51,8 @@
 var state = {
   items : [],
   nextPage: '',
-  previousPage: ''
+  prevPage: '',
+  searched: false
 };
 
 var YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/v3/search/"
@@ -61,31 +62,35 @@ function getDataFromApi(searchTerm, callback) {
     part: 'snippet',
     key: 'AIzaSyBxN1jj2vdsQILbeEYLQi6jlVHZbP6f4wY',
     q: searchTerm,
-    maxResults: 10
+    maxResults: 10,
   }
+  // if
+  // query.PageToken = state.nextPage
   $.getJSON(YOUTUBE_BASE_URL, query, callback);
 }
 
 function addItems(data){
   var itemArr = data.items.map(function(item, index){
     var thumbnail = item.snippet.thumbnails.default.url;
-    //var description (WILL USE THIS FOR ALT IMG TEXT)
-    //console.log(thumbnail);
-    var vidUrl = "https://www.youtube.com.com/watch?v=" + item.id.videoId;
-    //console.log(vidUrl);
-    return [thumbnail, vidUrl];
+    var description = item.snippet.description;
+    var title = item.snippet.title;
+    var vidUrl = "https://www.youtube.com/watch?v=" + item.id.videoId;
+    return [thumbnail, vidUrl, title, description];
   });
   state.items = itemArr;
-  //console.log(state.items);
+  state.nextPage = data.nextPageToken;
+  state.prevPage = data.prevPageToken;
 }
 
 function display(state){
-  //console.log(state.items);
-  //<li><a href="#"><img src="" alt=""></a></li>
   state.items.forEach(function(item){
-    console.log(item[0]);
-    console.log(item[1]);
+    $('#js-results-list').append('<li><h3>' + item[2] +
+    '</h3><a href="' + item[1] + '"><img src="' + item[0] +
+    '"alt="' + item[3] + '"></a></li>');
   });
+  if (state.searched){
+    $('.nav').show();
+  }
 }
 
 function initializeSearch(data){
@@ -93,9 +98,19 @@ function initializeSearch(data){
   display(state);
 }
 
+function eventListeners(){
+  $(".js-query").submit(function(e){
+    state.searched = true;
+    state.items = [];
+    $('#js-results-list').empty();
+    e.preventDefault();
+    var userSearch = $("#js-search-text").val();
+    getDataFromApi(userSearch, initializeSearch);
+  })
+}
 
 $(function (){
-  getDataFromApi("dog", initializeSearch);
+  eventListeners();
 });
 //$(eventHandlers);
 //OR
