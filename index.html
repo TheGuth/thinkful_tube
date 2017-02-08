@@ -4,16 +4,21 @@
   <link rel="stylesheet" type="text/css" href="styles/main.css">
 </head>
 <body>
-  <form class="js-query" action="#">
-    <label for="search-form">Search YouTube:</label>
-    <input id="js-search-text" type="text" name="search-form" value="" placeholder="dog or cat videos today?">
-    <button id="js-search-btn" type="submit" name="search">Search</button>
-  </form>
+  <div class="form-container">
+    <form class="js-query" action="#">
+      <label for="search-form">Search YouTube:</label>
+      <input id="js-search-text" type="text" name="search-form" value="" placeholder="dog or cat videos today?">
+      <button id="js-search-btn" type="submit" name="search">Search</button>
+    </form>
+  </div>
+  <div id="no-results" class="hidden">
+    <h3>No results. Try another search.</h3>
+  </div>
   <ul id="js-results-list">
   </ul>
   <div class="nav hidden">
-    <button id="js-next-btn" type="button" name="next-button">Next Page</button>
     <button id="js-prev-btn" type="button" name="prev-button">Previous Page</button>
+    <button id="js-next-btn" type="button" name="next-button">Next Page</button>
   </div>
 
 </body>

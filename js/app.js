@@ -66,7 +66,7 @@ var YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/v3/search/"
 
 function getDataFromApi(searchTerm, callback) {
   state.query.q = searchTerm;
-  
+
   $.getJSON(YOUTUBE_BASE_URL, state.query, callback);
 }
 
@@ -90,13 +90,20 @@ function addItems(data){
 }
 
 function display(state){
-  state.items.forEach(function(item){
-    $('#js-results-list').append('<li><h3>' + item[2] +
-    '</h3>' + '<a href="' + item[4] + '">' + item[5] + '</a><br><a href="' + item[1] + '"><img src="' + item[0] +
-    '"alt="' + item[3] + '"></a></li>');
-  });
-  if (state.searched){
-    $('.nav').show();
+  if (state.items.length === 0){
+    $('#no-results').show();
+    $('.nav').hide();
+  }
+  else {
+    $('#no-results').hide();
+    state.items.forEach(function(item){
+      $('#js-results-list').append('<li><h3>' + item[2] +
+      '</h3>' + '<a href="' + item[4] + '">' + item[5] + '</a><br><a href="' + item[1] + '"><img src="' + item[0] +
+      '"alt="' + item[3] + '"></a></li>');
+    });
+    if (state.searched){
+      $('.nav').show();
+    }
   }
 }
 
