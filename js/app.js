@@ -78,8 +78,10 @@ function addItems(data){
     var thumbnail = item.snippet.thumbnails.default.url;
     var description = item.snippet.description;
     var title = item.snippet.title;
+    var channelTitle = item.snippet.channelTitle;
+    var channel = "https://www.youtube.com/channel/" + item.snippet.channelId;
     var vidUrl = "https://www.youtube.com/watch?v=" + item.id.videoId;
-    return [thumbnail, vidUrl, title, description];
+    return [thumbnail, vidUrl, title, description, channel, channelTitle];
   });
 
   state.items = itemArr;
@@ -90,7 +92,7 @@ function addItems(data){
 function display(state){
   state.items.forEach(function(item){
     $('#js-results-list').append('<li><h3>' + item[2] +
-    '</h3><a href="' + item[1] + '"><img src="' + item[0] +
+    '</h3>' + '<a href="' + item[4] + '">' + item[5] + '</a><br><a href="' + item[1] + '"><img src="' + item[0] +
     '"alt="' + item[3] + '"></a></li>');
   });
   if (state.searched){
