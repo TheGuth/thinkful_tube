@@ -98,8 +98,8 @@ function display(state){
     $('#no-results').hide();
     state.items.forEach(function(item){
       $('#js-results-list').append('<li><h3>' + item[2] +
-      '</h3>' + '<a href="' + item[4] + '">' + item[5] + '</a><br><a href="' + item[1] + '"><img src="' + item[0] +
-      '"alt="' + item[3] + '"></a></li>');
+      '</h3>' + '<br><a href="' + item[1] + '"><img src="' + item[0] +
+      '"alt="' + item[3] + '"></a>' + '<br><a href="' + item[4] + '">' + item[5] + '</a></li>');
     });
     if (state.searched){
       $('.nav').show();
